@@ -63,6 +63,7 @@ def parse_google_results(query, num_search=10, search_time_limit=10):
     """Perform a Google search on IDFC Websites and parse the content of the top results."""
     site_query = f"site:https//www.idfcfirstbank.com/ {query}"
     urls = search(site_query, num_results=num_search)
+    st.write(urls)
     max_workers = os.cpu_count() or 1
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_url = {executor.submit(fetch_webpage, url, search_time_limit): url for url in urls}
