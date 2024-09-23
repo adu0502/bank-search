@@ -12,7 +12,7 @@ from googlesearch import search
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-NUM_SEARCH = 5  # Number of links to parse from Google
+NUM_SEARCH = 2  # Number of links to parse from Google
 SEARCH_TIME_LIMIT = 10  # Max seconds to request website sources before skipping to the next URL
 TOTAL_TIMEOUT = 20  # Overall timeout for all operations
 MAX_CONTENT = 500  # Number of words to add to LLM context for each search result
