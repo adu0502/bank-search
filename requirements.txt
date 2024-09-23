@@ -1,0 +1,8 @@
+googlesearch-python
+html2text
+requests
+streamlit
+beautifulsoup4
+lxml
+backoff
+openai
