@@ -12,9 +12,9 @@ from googlesearch import search
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-NUM_SEARCH = 10  # Number of links to parse from Google
+NUM_SEARCH = 5  # Number of links to parse from Google
 SEARCH_TIME_LIMIT = 10  # Max seconds to request website sources before skipping to the next URL
-TOTAL_TIMEOUT = 6  # Overall timeout for all operations
+TOTAL_TIMEOUT = 20  # Overall timeout for all operations
 MAX_CONTENT = 500  # Number of words to add to LLM context for each search result
 MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
 LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
@@ -24,15 +24,12 @@ def save_markdown(content, file_path):
     with open(file_path, 'a') as file:
         file.write(content)
 
-
 def generate_markdown(html_content):
-
     h = html2text.HTML2Text()
     h.ignore_links = False
     h.ignore_images = False
     markdown_content = h.handle(html_content)
     return markdown_content
-
 
 # Webpage Fetch and Summarization Logic (using your provided functions)
 def trace_function_factory(start):
@@ -79,7 +76,6 @@ def llm_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
-
 
 @backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
 def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LLM_MODEL, max_content=MAX_CONTENT, max_tokens=MAX_TOKENS, debug=False):
