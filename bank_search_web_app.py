@@ -17,7 +17,8 @@ SEARCH_TIME_LIMIT = 10  # Max seconds to request website sources before skipping
 TOTAL_TIMEOUT = 20  # Overall timeout for all operations
 MAX_CONTENT = 500  # Number of words to add to LLM context for each search result
 MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
-LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
+# LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
+LLM_MODEL = 'gpt-4o'
 
 # Save markdown content utility
 def save_markdown(content, file_path):
