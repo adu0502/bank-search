@@ -42,12 +42,14 @@ def trace_function_factory(start):
 
 
 def fetch_webpage(url, timeout):
+    """Fetch the content of a webpage given a URL and a timeout."""
     start = time.time()
     sys.settrace(trace_function_factory(start))
     try:
+        print(f"Fetching link: {url}")
         response = requests.get(url, timeout=timeout)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'lxml')
+        # soup = BeautifulSoup(response.text, 'lxml')
         page_text = generate_markdown(response.text)
         # paragraphs = soup.find_all('p')
         # page_text = ' '.join([para.get_text() for para in paragraphs])
@@ -59,12 +61,12 @@ def fetch_webpage(url, timeout):
     return url, None
 
 
-def parse_google_results(query, num_search=10, search_time_limit=10):
-    """Perform a Google search on IDFC Websites and parse the content of the top results."""
-    site_query = f"site:https//www.idfcfirstbank.com/ {query}"
+def parse_google_results(query, num_search=NUM_SEARCH, search_time_limit=SEARCH_TIME_LIMIT):
+    """Perform a Google search and parse the content of the top results from a specific site."""
+    site_query = f"site:https://www.idfcfirstbank.com/ {query}"
     urls = search(site_query, num_results=num_search)
-    st.write(urls)
-    max_workers = os.cpu_count() or 1
+
+    max_workers = os.cpu_count() or 1  # Fallback to 1 if os.cpu_count() returns None
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_url = {executor.submit(fetch_webpage, url, search_time_limit): url for url in urls}
         return {url: page_text for future in as_completed(future_to_url) if (url := future.result()[0]) and (page_text := future.result()[1])}
