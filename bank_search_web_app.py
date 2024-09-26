@@ -12,6 +12,7 @@ import tiktoken
 from googlesearch import search
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from langchain_community.tools import TavilySearchResults
 
 NUM_SEARCH = 2  # Number of links to parse from Google
 SEARCH_TIME_LIMIT = 10  # Max seconds to request website sources before skipping to the next URL
@@ -27,8 +28,10 @@ def save_markdown(content, file_path):
     with open(file_path, 'a') as file:
         file.write(content)
 
+
 def count_tokens(encoding, text):
     return len(encoding.encode(text[0]['content']))
+
 
 def generate_markdown(html_content):
     h = html2text.HTML2Text()
@@ -36,6 +39,7 @@ def generate_markdown(html_content):
     h.ignore_images = False
     markdown_content = h.handle(html_content)
     return markdown_content
+
 
 # Webpage Fetch and Summarization Logic (using your provided functions)
 def trace_function_factory(start):
@@ -79,12 +83,29 @@ def parse_google_results(query, num_search=NUM_SEARCH, search_time_limit=SEARCH_
 
 
 @backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
-def llm_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
+def google_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
     """Check if query requires search and execute Google search."""
     search_dic = parse_google_results(query)
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
+
+
+@backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
+def tavily_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
+
+    tool = TavilySearchResults(max_results = 5,
+                               search_depth="advanced",
+                               include_answer=True,
+                               include_raw_content=True,
+                               include_images=False,
+                               include_domains=["https://idfcfirstbank.com/"])
+
+    search_dic = tool.invoke({"query": query})
+    search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
+    save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
+    return search_dic
+
 
 @backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
 def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LLM_MODEL, max_content=MAX_CONTENT, max_tokens=MAX_TOKENS, debug=False):
@@ -168,6 +189,8 @@ with cent_co:
     st.image("IDFC FIRST Bank Logo.jpg", width=200)
 
 openai.api_key = st.secrets["API_KEY"]
+os.environ["TAVILY_API_KEY"] = st.secrets["TAVILY_API_KEY"]
+
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
 left_co, cent_co, last_co = st.columns(3)
@@ -183,7 +206,12 @@ query = st.text_input("Type your search query here:", "", key="search",
 if query:
     with st.spinner("Searching the web..."):
         file_path = "search_results.md"
-        search_results = llm_check_search(query, file_path)
+        search_results = None
+
+        search_results = tavily_check_search(query, file_path)
+
+        if search_results:
+            ~search_results = google_check_search(query, file_path)
 
         # Summarize results using the LLM
         msg_history = llm_answer(query, file_path, search_dic=search_results)
