@@ -154,7 +154,10 @@ st.header("IDFC First Bank Website Search", divider=True)
 # api_key_input = st.text_input("Enter your GPT-4 API key:", type="password")
 
 # openai.api_key = os.getenv('GPT_KEY')
-api_key_input = os.getenv('GPT_KEY')
+
+api_key_input = os.getenv('HELLO_SECRET')
+print(api_key_input)
+st.write(api_key_input)
 client = openai.OpenAI(api_key = api_key_input)
 
 # Initialize OpenAI client with the provided API key
