@@ -20,6 +20,8 @@ MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
 # LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
 LLM_MODEL = 'gpt-4o'
 
+load_dotenv()
+
 # Save markdown content utility
 def save_markdown(content, file_path):
     with open(file_path, 'a') as file:
@@ -156,8 +158,8 @@ st.header("IDFC First Bank Website Search", divider=True)
 # openai.api_key = os.getenv('GPT_KEY')
 # client = openai.OpenAI(api_key = api_key_input)
 
-openai.api_key = st.secrets['OPENAI_API_KEY']
-client = openai.OpenAI(api_key = st.secrets['OPENAI_API_KEY'])
+openai.api_key = os.getenv("GPT_KEY")
+client = openai.OpenAI(api_key = os.getenv("GPT_KEY"))
 
 # Initialize OpenAI client with the provided API key
 # if api_key_input:
