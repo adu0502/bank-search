@@ -99,6 +99,9 @@ def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LL
     msg_history = msg_history or []
     new_msg_history = msg_history + [{"role": "user", "content": prompt}]
 
+    st.write(type(new_msg_history))
+    st.write(new_msg_history)
+
     total_tokens = count_tokens(encoding, new_msg_history) + len(system_prompt.split())
     if total_tokens > 128000:  # Adjust this limit as per your model's max tokens
         print("Warning: Exceeding maximum token limit. Reducing message history.")
