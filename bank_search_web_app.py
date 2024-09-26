@@ -205,19 +205,19 @@ with st.container():
                                   help="Enter your search terms")
 
     # Optional: Search button
-    if st.button("Search"):
-        if query:
-            with st.spinner("Searching the web..."):
-                file_path = f"search_results.md"
-                search_results = llm_check_search(query, file_path)
+if st.button("Search"):
+    if query:
+        with st.spinner("Searching the web..."):
+            file_path = f"search_results.md"
+            search_results = llm_check_search(query, file_path)
 
-                # Summarize results using the LLM
-                msg_history = llm_answer(query, file_path, search_dic = search_results)
+            # Summarize results using the LLM
+            msg_history = llm_answer(query, file_path, search_dic = search_results)
 
-                # Display the summarized answer
-                st.write(f"**Answer**: {msg_history[-1]['content']}")
+            # Display the summarized answer
+            st.markdown(f"**Answer**: {msg_history[-1]['content']}")
 
-                search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
-                st.write(f"## Sources\n{search_result_md}\n\n")
-        else:
-            st.warning("Please enter a search term.")
+            search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
+            st.markdown(f"## Sources\n{search_result_md}\n\n")
+    else:
+        st.warning("Please enter a search term.")
