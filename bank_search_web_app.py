@@ -13,6 +13,7 @@ from googlesearch import search
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from langchain_community.tools import TavilySearchResults
+from requests.exceptions import HTTPError
 
 NUM_SEARCH = 2  # Number of links to parse from Google
 SEARCH_TIME_LIMIT = 10  # Max seconds to request website sources before skipping to the next URL
@@ -94,20 +95,44 @@ def google_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
 @backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
 def tavily_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
 
-    tool = TavilySearchResults(max_results = 5,
-                               search_depth="advanced",
-                               include_answer=True,
-                               include_raw_content=True,
-                               include_images=False,
-                               include_domains=["https://idfcfirstbank.com/"])
+    search_dic = None
+    try:
+        if not query or not isinstance(query, str):
+            raise ValueError("Query must be a valid non-empty string.")
+    
+        tool = TavilySearchResults(
+            max_results=5,
+            search_depth="advanced",
+            include_answer=True,
+            include_raw_content=True,
+            include_images=False,
+            include_domains=["https://idfcfirstbank.com/"]
+        )
+    
+        # Log the parameters before invoking the API
+        print(f"Invoking search with query: {query}")
+    
+        search_dic_response = tool.invoke({"query": query})
+    
+        # Check if the response is not empty or None
+        if not search_dic_response:
+            raise ValueError("Received empty response from the API.")
+    
+        st.markdown(search_dic_response)
+    
+        search_dic = {entry['url']: entry['content'] for entry in search_dic_response}
+        search_result_md = "\n".join([f"{number + 1}. {link}" for number, link in enumerate(search_dic.keys())])
+        save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
+    
+    except HTTPError as e:
+        if e.response.status_code == 400:
+            print("Error 400: Bad Request. Please check the query parameters.")
+        else:
+            print(f"HTTP error occurred: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-    search_dic_response = tool.invoke({"query": query})
-    st.markdown(search_dic_response)
-    search_dic = {entry['url']: entry['content'] for entry in search_dic_response}
-    search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
-    save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
-
 
 @backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError))
 def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LLM_MODEL, max_content=MAX_CONTENT, max_tokens=MAX_TOKENS, debug=False):
