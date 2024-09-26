@@ -6,3 +6,4 @@ beautifulsoup4
 lxml
 backoff
 openai
+tiktoken==0.1.1
