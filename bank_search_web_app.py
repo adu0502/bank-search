@@ -154,7 +154,8 @@ client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
 left_co, cent_co, last_co = st.columns(3)
 with cent_co:
-    st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Search</h2>", unsafe_allow_html=True)
+    st.button("Search")
 
 query = st.text_input("Type your search query here:", "", key="search", 
                           placeholder="Search...", 
