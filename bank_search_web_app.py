@@ -185,11 +185,22 @@ User Query:
 
 st.set_page_config(page_title="IDFC First Bank Search", page_icon="🔍")
 
-hide_github_icon_1 = """
+import streamlit as st
 
-.css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob, .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137, .viewerBadge_text__1JaDK{ display: none; } #MainMenu{ visibility: hidden; } footer { visibility: hidden; } header { visibility: hidden; }
+# Hiding the buttons using CSS
+hide_buttons_css = """
+<style>
+    [data-testid="stBaseButton-header"] {
+        display: none !important;
+    }
+    
+    [data-testid="stActionButtonIcon"] {
+        display: none !important;
+    }
+</style>
 """
-st.markdown(hide_github_icon_1, unsafe_allow_html=True)
+# Applying the CSS
+st.markdown(hide_buttons_css, unsafe_allow_html=True)
 
 
 left_co, cent_co,last_co = st.columns(3)
