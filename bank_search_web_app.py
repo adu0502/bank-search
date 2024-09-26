@@ -28,7 +28,7 @@ def save_markdown(content, file_path):
         file.write(content)
 
 def count_tokens(encoding, text):
-    return len(encoding.encode(text['content']))
+    return len(encoding.encode(text[0]['content']))
 
 def generate_markdown(html_content):
     h = html2text.HTML2Text()
@@ -98,9 +98,6 @@ def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LL
 
     msg_history = msg_history or []
     new_msg_history = msg_history + [{"role": "user", "content": prompt}]
-
-    st.write(type(new_msg_history))
-    st.write(new_msg_history)
 
     total_tokens = count_tokens(encoding, new_msg_history) + len(system_prompt.split())
     if total_tokens > 128000:  # Adjust this limit as per your model's max tokens
