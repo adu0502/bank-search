@@ -20,17 +20,15 @@ MAX_CONTENT = 500  # Number of words to add to LLM context for each search resul
 MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
 # LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
 LLM_MODEL = 'gpt-4o'
-ENCODING = tiktoken.encoding_for_model(LLM_MODEL)
+encoding = tiktoken.encoding_for_model('gpt-4o')
 
 # Save markdown content utility
 def save_markdown(content, file_path):
     with open(file_path, 'a') as file:
         file.write(content)
 
-
 def count_tokens(encoding, text):
     return len(encoding.encode(text))
-
 
 def generate_markdown(html_content):
     h = html2text.HTML2Text()
@@ -101,7 +99,7 @@ def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LL
     msg_history = msg_history or []
     new_msg_history = msg_history + [{"role": "user", "content": prompt}]
 
-    total_tokens = count_tokens(ENCODING, new_msg_history) + len(system_prompt.split())
+    total_tokens = count_tokens(encoding, new_msg_history) + len(system_prompt.split())
     if total_tokens > 128000:  # Adjust this limit as per your model's max tokens
         print("Warning: Exceeding maximum token limit. Reducing message history.")
         # Truncate the history or adjust as needed
