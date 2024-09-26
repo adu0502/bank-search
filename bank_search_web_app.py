@@ -157,7 +157,7 @@ st.header("IDFC First Bank Website Search", divider=True)
 # client = openai.OpenAI(api_key = api_key_input)
 
 openai.api_key = st.secrets['OPENAI_API_KEY']
-client = openai.OpenAI(api_key = st.secrets[['OPENAI_API_KEY'])
+client = openai.OpenAI(api_key = st.secrets['OPENAI_API_KEY'])
 
 # Initialize OpenAI client with the provided API key
 # if api_key_input:
