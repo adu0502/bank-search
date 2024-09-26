@@ -163,7 +163,7 @@ client = openai.OpenAI(api_key=api_key_input)
 # else:
     # st.warning("Please enter your OpenAI API key to use the search functionality.")
 
-if api_key_input:
+if client:
     # Search Functionality
     st.header("Search for Information", divider=True)
     query = st.text_input("Enter your query or keywords:")
