@@ -149,7 +149,7 @@ st.set_page_config(page_title="IDFC First Bank Search", page_icon="🔍")
 
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
-    st.image("IDFC FIRST Bank Logo.jpg", width=300)
+    st.image("IDFC FIRST Bank Logo.jpg", width=200)
 
 openai.api_key = st.secrets["API_KEY"]
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
