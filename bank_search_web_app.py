@@ -91,30 +91,35 @@ def llm_answer(query, file_path, msg_history=None, search_dic=None, llm_model=LL
         prompt = answer_prompt.format(query=query)
         system_prompt = system_prompt_answer
 
-    
     msg_history = msg_history or []
     new_msg_history = msg_history + [{"role": "user", "content": prompt}]
-    response = client.chat.completions.create(
-        model=llm_model,
-        messages=[{"role": "system", "content": system_prompt}, *new_msg_history],
-        max_tokens=max_tokens,
-        stream=True
-    )
+    
+    try:
+        response = client.chat.completions.create(
+            model=llm_model,
+            messages=[{"role": "system", "content": system_prompt}, *new_msg_history],
+            max_tokens=max_tokens,
+            stream=True
+        )
 
-    print("\n" + "*" * 20 + " LLM START " + "*" * 20)
-    save_markdown(f"## Answer\n", file_path)
-    content = []
-    for chunk in response:
-        chunk_content = chunk.choices[0].delta.content
-        if chunk_content:
-            content.append(chunk_content)
-            print(chunk_content, end="")
-            save_markdown(chunk_content, file_path)
+        # print("\n" + "*" * 20 + " LLM START " + "*" * 20)
+        save_markdown(f"## Answer\n", file_path)
+        content = []
+        for chunk in response:
+            chunk_content = chunk.choices[0].delta.content
+            if chunk_content:
+                content.append(chunk_content)
+                # print(chunk_content, end="")
+                save_markdown(chunk_content, file_path)
 
-    print("\n" + "*" * 21 + " LLM END " + "*" * 21 + "\n")
-    # change the line for the next question
-    save_markdown("\n\n", file_path)
-    new_msg_history = new_msg_history + [{"role": "assistant", "content": ''.join(content)}]
+        # print("\n" + "*" * 21 + " LLM END " + "*" * 21 + "\n")
+        save_markdown("\n\n", file_path)
+        new_msg_history = new_msg_history + [{"role": "assistant", "content": ''.join(content)}]
+
+    except openai.BadRequestError as e:
+        print(f"Error: {e}")  # Log the error if needed
+        save_markdown("## Unable to find relevant results\n", file_path)
+        return new_msg_history + [{"role": "assistant", "content": "Unable to find relevant results."}]
 
     return new_msg_history
 
