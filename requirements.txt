@@ -7,3 +7,5 @@ lxml
 backoff
 openai
 tiktoken
+langchain-community==0.3.1
+tavily-python==0.5.0
