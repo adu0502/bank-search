@@ -20,7 +20,7 @@ MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
 # LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
 LLM_MODEL = 'gpt-4o'
 
-load_dotenv()
+# load_dotenv()
 
 # Save markdown content utility
 def save_markdown(content, file_path):
