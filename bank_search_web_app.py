@@ -215,9 +215,9 @@ with st.container():
                 msg_history = llm_answer(query, file_path, search_dic = search_results)
 
                 # Display the summarized answer
-                st.markdown(f"**Answer**: {msg_history[-1]['content']}")
+                st.write(f"**Answer**: {msg_history[-1]['content']}")
 
                 search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
-                st.markdown(f"## Sources\n{search_result_md}\n\n")
+                st.write(f"## Sources\n{search_result_md}\n\n")
         else:
             st.warning("Please enter a search term.")
