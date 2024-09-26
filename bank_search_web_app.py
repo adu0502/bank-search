@@ -20,8 +20,6 @@ MAX_TOKENS = 1000 # Maximum number of tokens LLM generates
 # LLM_MODEL = 'gpt-4o-mini' #'gpt-3.5-turbo' #'gpt-4o'
 LLM_MODEL = 'gpt-4o'
 
-# load_dotenv()
-
 # Save markdown content utility
 def save_markdown(content, file_path):
     with open(file_path, 'a') as file:
@@ -154,54 +152,7 @@ with cent_co:
 openai.api_key = st.secrets["API_KEY"]
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
-st.markdown("""
-    <style>
-        body {
-            background-color: #f0f0f5;
-            color: #333;
-            text-align: center;  /* Center text */
-        }
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;  /* Stack vertically */
-            margin-top: 20px;
-        }
-        .search-box {
-            width: 100%;
-            max-width: 600px;
-            padding: 10px;
-            border: 2px solid #007BFF;
-            border-radius: 5px;
-            font-size: 18px;
-            margin-bottom: 10px;  /* Space below the input */
-        }
-        .search-box:focus {
-            outline: none;
-            border-color: #0056b3;
-        }
-        .search-button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .search-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
-import streamlit as st
-
-# Create three columns
-left_co, cent_co, last_co = st.columns([1, 2, 1])  # Adjust column width if needed
-
-# Center column for the search input and button
+left_co, cent_co, last_co = st.columns(3)
 with cent_co:
     st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
 
