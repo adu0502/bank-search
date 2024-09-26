@@ -219,11 +219,11 @@ left_co, cent_co, last_co = st.columns(3)
 with cent_co:
     st.markdown("<h2 style='text-align: center;'>Search</h2>", unsafe_allow_html=True)
 
-query = st.text_input("Type your search query here:", "", key="search", 
-                          placeholder="Search...", 
-                          label_visibility='collapsed', 
-                          max_chars=100, 
-                          help="Enter your search terms")
+    query = st.text_input("Type your search query here:", "", key="search", 
+                              placeholder="Search...", 
+                              label_visibility='collapsed', 
+                              max_chars=100, 
+                              help="Enter your search terms")
 
 if query:
     with st.spinner("Searching the web..."):
