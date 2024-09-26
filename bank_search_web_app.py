@@ -146,6 +146,8 @@ User Query:
 
 
 st.set_page_config(page_title="IDFC First Bank Search", page_icon="🔍")
+st.image("IDFC FIRST Bank Logo.jpg", width=300)
+
 openai.api_key = st.secrets["API_KEY"]
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
@@ -192,7 +194,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with st.container():
-    st.image("IDFC FIRST Bank Logo.jpg", width=200)
     st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
     query = st.text_input("Type your search query here:", "", key="search", 
                                   placeholder="Search...", 
