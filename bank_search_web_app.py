@@ -183,9 +183,7 @@ User Query:
 """
 
 
-st.set_page_config(page_title="IDFC First Bank Search", page_icon="🔍")
-
-import streamlit as st
+st.set_page_config(page_title="IDFC First Bank Search", page_icon="🔍", layout="wide")
 
 # Hiding the buttons using CSS
 hide_buttons_css = """
@@ -209,7 +207,8 @@ st.markdown(hide_buttons_css, unsafe_allow_html=True)
 
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
-    st.image("IDFC FIRST Bank Logo.jpg", width=200)
+    # st.image("IDFC FIRST Bank Logo.jpg", width=200)
+    st.image("IDFC FIRST Bank Logo.jpg")
 
 openai.api_key = st.secrets["API_KEY"]
 os.environ["TAVILY_API_KEY"] = st.secrets["TAVILY_API_KEY"]
