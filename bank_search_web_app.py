@@ -158,6 +158,10 @@ st.header("IDFC First Bank Website Search", divider=True)
 api_key_input = os.getenv('HELLO_SECRET')
 print(api_key_input)
 st.write(api_key_input)
+
+key = os.environ.get('HELLO_SECRET')
+print(key)
+st.write(key)
 # client = openai.OpenAI(api_key = api_key_input)
 
 # Initialize OpenAI client with the provided API key
