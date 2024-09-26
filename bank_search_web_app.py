@@ -179,7 +179,7 @@ st.markdown("""
 
 with st.container():
     st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
-    search_query = st.text_input("Type your search query here:", "", key="search", 
+    query = st.text_input("Type your search query here:", "", key="search", 
                                   placeholder="Search...", 
                                   label_visibility='collapsed', 
                                   max_chars=100, 
@@ -187,7 +187,7 @@ with st.container():
 
     # Optional: Search button
     if st.button("Search"):
-        if search_query:
+        if query:
             with st.spinner("Searching the web..."):
                 file_path = f"search_results.md"
                 search_results = llm_check_search(query, file_path)
