@@ -86,6 +86,7 @@ def parse_google_results(query, num_search=NUM_SEARCH, search_time_limit=SEARCH_
 def google_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
     """Check if query requires search and execute Google search."""
     search_dic = parse_google_results(query)
+    st.write(search_dic)
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
@@ -208,7 +209,7 @@ if query:
         file_path = "search_results.md"
         search_results = None
 
-        search_results = tavily_check_search(query, file_path)
+        search_results = google_check_search(query, file_path)
         
         if not search_results:  # If search_results is empty or None
             search_results = google_check_search(query, file_path)
