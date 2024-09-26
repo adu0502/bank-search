@@ -209,9 +209,9 @@ if query:
         search_results = None
 
         search_results = tavily_check_search(query, file_path)
-
-        if search_results:
-            ~search_results = google_check_search(query, file_path)
+        
+        if not search_results:  # If search_results is empty or None
+            search_results = google_check_search(query, file_path)
 
         # Summarize results using the LLM
         msg_history = llm_answer(query, file_path, search_dic=search_results)
