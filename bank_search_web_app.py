@@ -86,7 +86,6 @@ def parse_google_results(query, num_search=NUM_SEARCH, search_time_limit=SEARCH_
 def google_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
     """Check if query requires search and execute Google search."""
     search_dic = parse_google_results(query)
-    st.write(search_dic)
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
@@ -102,7 +101,8 @@ def tavily_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
                                include_images=False,
                                include_domains=["https://idfcfirstbank.com/"])
 
-    search_dic = tool.invoke({"query": query})
+    search_dic_response = tool.invoke({"query": query})
+    search_dic = {entry['url']: entry['content'] for entry in search_dic_response}
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
     return search_dic
