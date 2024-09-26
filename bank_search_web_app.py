@@ -102,6 +102,7 @@ def tavily_check_search(query, file_path, msg_history=None, llm_model="gpt-4"):
                                include_domains=["https://idfcfirstbank.com/"])
 
     search_dic_response = tool.invoke({"query": query})
+    st.markdown(search_dic_response)
     search_dic = {entry['url']: entry['content'] for entry in search_dic_response}
     search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_dic.keys())])
     save_markdown(f"## Sources\n{search_result_md}\n\n", file_path)
