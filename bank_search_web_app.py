@@ -196,28 +196,34 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-with st.container():
+import streamlit as st
+
+# Create three columns
+left_co, cent_co, last_co = st.columns([1, 2, 1])  # Adjust column width if needed
+
+# Center column for the search input and button
+with cent_co:
     st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
     query = st.text_input("Type your search query here:", "", key="search", 
-                                  placeholder="Search...", 
-                                  label_visibility='collapsed', 
-                                  max_chars=100, 
-                                  help="Enter your search terms")
+                          placeholder="Search...", 
+                          label_visibility='collapsed', 
+                          max_chars=100, 
+                          help="Enter your search terms")
 
-    # Optional: Search button
-if st.button("Search"):
-    if query:
-        with st.spinner("Searching the web..."):
-            file_path = f"search_results.md"
-            search_results = llm_check_search(query, file_path)
+    if st.button("Search"):
+        if query:
+            with left_co:  # Display results in the left column
+                with st.spinner("Searching the web..."):
+                    file_path = "search_results.md"
+                    search_results = llm_check_search(query, file_path)
 
-            # Summarize results using the LLM
-            msg_history = llm_answer(query, file_path, search_dic = search_results)
+                    # Summarize results using the LLM
+                    msg_history = llm_answer(query, file_path, search_dic=search_results)
 
-            # Display the summarized answer
-            st.markdown(f"**Answer**: {msg_history[-1]['content']}")
+                    # Display the summarized answer
+                    st.markdown(f"**Answer**: {msg_history[-1]['content']}")
 
-            search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
-            st.markdown(f"## Sources\n{search_result_md}\n\n")
-    else:
-        st.warning("Please enter a search term.")
+                    search_result_md = "\n".join([f"{number + 1}. {link}" for number, link in enumerate(search_results.keys())])
+                    st.markdown(f"## Sources\n{search_result_md}\n\n")
+        else:
+            st.warning("Please enter a search term.")
