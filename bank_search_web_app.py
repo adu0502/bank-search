@@ -209,7 +209,7 @@ if query:
         file_path = "search_results.md"
         search_results = None
 
-        search_results = google_check_search(query, file_path)
+        search_results = tavily_check_search(query, file_path)
         
         if not search_results:  # If search_results is empty or None
             search_results = google_check_search(query, file_path)
