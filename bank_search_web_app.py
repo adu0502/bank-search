@@ -235,7 +235,7 @@ with cent_co:
     st.image("IDFC FIRST Bank Logo 1.jpg")
 
 openai.api_key = st.secrets["API_KEY"]
-os.environ["TAVILY_API_KEY"] = st.secrets["TAVILY_API_KEY"]
+os.environ["TAVILY_API_KEY"] = st.secrets["TAVILY_API_KEY_1"]
 
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
