@@ -243,5 +243,5 @@ if query:
 
         search_result_md = "\n".join([f"{number + 1}. {link}" for number, link in enumerate(search_results.keys())])
         st.markdown(f"## Sources\n{search_result_md}\n\n")
-else:
-    st.warning("Please enter a search term.")
+# else:
+#     st.warning("Please enter a search term.")
