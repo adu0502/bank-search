@@ -150,7 +150,7 @@ st.set_page_config(layout="wide", page_title="IDFC Search")
 
 st.image("IDFC_First_Bank_logo.jpg")
 
-st.header("IDFC First Bank Website Search", divider=True)
+# st.header("IDFC First Bank Website Search", divider=True)
 
 # st.header("OpenAI API Key", divider=True)
 # api_key_input = st.text_input("Enter your GPT-4 API key:", type="password")
