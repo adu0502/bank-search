@@ -197,6 +197,10 @@ hide_buttons_css = """
     [data-testid="stActionButtonIcon"] {
         display: none !important;
     }
+
+    [data-testid="stBaseButton-headerNoPadding"] {
+        display: none !important;
+    }
 </style>
 """
 # Applying the CSS
