@@ -146,7 +146,7 @@ User Query:
 st.set_page_config(layout="wide", page_title="IDFC Search")
 # Add an input field in the sidebar to get the OpenAI API key from the user
 
-st.image("IDFC_First_Bank_logo.png")
+st.image("IDFC_First_Bank_logo.jpg")
 
 st.header("IDFC First Bank Website Search", divider=True)
 
