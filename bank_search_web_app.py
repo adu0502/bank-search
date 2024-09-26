@@ -208,7 +208,7 @@ st.markdown(hide_buttons_css, unsafe_allow_html=True)
 left_co, cent_co,last_co = st.columns(3)
 with cent_co:
     # st.image("IDFC FIRST Bank Logo.jpg", width=200)
-    st.image("IDFC FIRST Bank Logo.jpg")
+    st.image("IDFC FIRST Bank Logo 1.jpg")
 
 openai.api_key = st.secrets["API_KEY"]
 os.environ["TAVILY_API_KEY"] = st.secrets["TAVILY_API_KEY"]
