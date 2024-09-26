@@ -154,15 +154,10 @@ st.header("IDFC First Bank Website Search", divider=True)
 # api_key_input = st.text_input("Enter your GPT-4 API key:", type="password")
 
 # openai.api_key = os.getenv('GPT_KEY')
-
-api_key_input = os.getenv('HELLO_SECRET')
-print(api_key_input)
-st.write(api_key_input)
-
-key = os.environ.get('HELLO_SECRET')
-print(key)
-st.write(key)
 # client = openai.OpenAI(api_key = api_key_input)
+
+openai.api_key = OPENAI_API_KEY
+client = openai.OpenAI(api_key = OPENAI_API_KEY)
 
 # Initialize OpenAI client with the provided API key
 # if api_key_input:
@@ -171,23 +166,23 @@ st.write(key)
 # else:
     # st.warning("Please enter your OpenAI API key to use the search functionality.")
 
-# if client:
-#     # Search Functionality
-#     st.header("Search for Information", divider=True)
-#     query = st.text_input("Enter your query or keywords:")
+if client:
+    # Search Functionality
+    st.header("Search for Information", divider=True)
+    query = st.text_input("Enter your query or keywords:")
 
-#     # Perform search if query is provided
-#     if query:
-#         st.subheader("Search Results:")
-#         with st.spinner("Searching the web..."):
-#             file_path = f"search_results.md"
-#             search_results = llm_check_search(query, file_path)
+    # Perform search if query is provided
+    if query:
+        st.subheader("Search Results:")
+        with st.spinner("Searching the web..."):
+            file_path = f"search_results.md"
+            search_results = llm_check_search(query, file_path)
 
-#             # Summarize results using the LLM
-#             msg_history = llm_answer(query, file_path, search_dic = search_results)
+            # Summarize results using the LLM
+            msg_history = llm_answer(query, file_path, search_dic = search_results)
 
-#             # Display the summarized answer
-#             st.markdown(f"**Answer**: {msg_history[-1]['content']}")
+            # Display the summarized answer
+            st.markdown(f"**Answer**: {msg_history[-1]['content']}")
 
-#             search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
-#             st.markdown(f"## Sources\n{search_result_md}\n\n")
+            search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
+            st.markdown(f"## Sources\n{search_result_md}\n\n")
