@@ -155,7 +155,6 @@ client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 left_co, cent_co, last_co = st.columns(3)
 with cent_co:
     st.markdown("<h2 style='text-align: center;'>Search</h2>", unsafe_allow_html=True)
-    st.button("Search")
 
 query = st.text_input("Type your search query here:", "", key="search", 
                           placeholder="Search...", 
@@ -163,19 +162,18 @@ query = st.text_input("Type your search query here:", "", key="search",
                           max_chars=100, 
                           help="Enter your search terms")
 
-if st.button("Search"):
-    if query:
-        with st.spinner("Searching the web..."):
-            file_path = "search_results.md"
-            search_results = llm_check_search(query, file_path)
+if query:
+    with st.spinner("Searching the web..."):
+        file_path = "search_results.md"
+        search_results = llm_check_search(query, file_path)
 
-            # Summarize results using the LLM
-            msg_history = llm_answer(query, file_path, search_dic=search_results)
+        # Summarize results using the LLM
+        msg_history = llm_answer(query, file_path, search_dic=search_results)
 
-            # Display the summarized answer
-            st.markdown(f"**Answer**: {msg_history[-1]['content']}")
+        # Display the summarized answer
+        st.markdown(f"**Answer**: {msg_history[-1]['content']}")
 
-            search_result_md = "\n".join([f"{number + 1}. {link}" for number, link in enumerate(search_results.keys())])
-            st.markdown(f"## Sources\n{search_result_md}\n\n")
-    else:
-        st.warning("Please enter a search term.")
+        search_result_md = "\n".join([f"{number + 1}. {link}" for number, link in enumerate(search_results.keys())])
+        st.markdown(f"## Sources\n{search_result_md}\n\n")
+else:
+    st.warning("Please enter a search term.")
