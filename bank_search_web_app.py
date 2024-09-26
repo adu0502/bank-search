@@ -28,6 +28,7 @@ def save_markdown(content, file_path):
         file.write(content)
 
 def count_tokens(encoding, text):
+    st.write(text)
     return len(encoding.encode(text))
 
 def generate_markdown(html_content):
