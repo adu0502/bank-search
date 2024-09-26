@@ -145,47 +145,60 @@ User Query:
 """
 
 
-st.set_page_config(layout="wide", page_title="IDFC Search")
-# Add an input field in the sidebar to get the OpenAI API key from the user
-
-# st.image("IDFC_First_Bank_logo.jpg")
-
-st.image("IDFC FIRST Bank Logo.jpg")
-# st.header("IDFC First Bank Website Search", divider=True)
-
-# st.header("OpenAI API Key", divider=True)
-# api_key_input = st.text_input("Enter your GPT-4 API key:", type="password")
-
+st.set_page_config(page_title="Search Application", page_icon="🔍")
+st.image("IDFC FIRST Bank Logo.jpg", width=200)
 openai.api_key = st.secrets["API_KEY"]
 client = openai.OpenAI(api_key = st.secrets["API_KEY"])
 
-# openai.api_key = os.getenv("GPT_KEY")
-# client = openai.OpenAI(api_key = os.getenv("GPT_KEY"))
+st.markdown("""
+    <style>
+        body {
+            background-color: #f0f0f5;
+            color: #333;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #0056b3;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-# Initialize OpenAI client with the provided API key
-# if api_key_input:
-    # openai.api_key = api_key_input
-    # client = openai.OpenAI(api_key=api_key_input)
-# else:
-    # st.warning("Please enter your OpenAI API key to use the search functionality.")
 
-if client:
-    # Search Functionality
-    st.header("Search for Information", divider=True)
-    query = st.text_input("Enter your query or keywords:")
+with st.container():
+    st.markdown("<h2 style='text-align: center;'>Search for Information</h2>", unsafe_allow_html=True)
+    search_query = st.text_input("Type your search query here:", "", key="search", 
+                                  placeholder="Search...", 
+                                  label_visibility='collapsed', 
+                                  max_chars=100, 
+                                  help="Enter your search terms")
 
-    # Perform search if query is provided
-    if query:
-        st.subheader("Search Results:")
-        with st.spinner("Searching the web..."):
-            file_path = f"search_results.md"
-            search_results = llm_check_search(query, file_path)
+    # Optional: Search button
+    if st.button("Search"):
+        if search_query:
+            with st.spinner("Searching the web..."):
+                file_path = f"search_results.md"
+                search_results = llm_check_search(query, file_path)
 
-            # Summarize results using the LLM
-            msg_history = llm_answer(query, file_path, search_dic = search_results)
+                # Summarize results using the LLM
+                msg_history = llm_answer(query, file_path, search_dic = search_results)
 
-            # Display the summarized answer
-            st.markdown(f"**Answer**: {msg_history[-1]['content']}")
+                # Display the summarized answer
+                st.markdown(f"**Answer**: {msg_history[-1]['content']}")
 
-            search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
-            st.markdown(f"## Sources\n{search_result_md}\n\n")
+                search_result_md = "\n".join([f"{number+1}. {link}" for number, link in enumerate(search_results.keys())])
+                st.markdown(f"## Sources\n{search_result_md}\n\n")
+            else:
+                st.warning("Please enter a search term.")
